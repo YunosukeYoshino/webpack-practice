@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { Template } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const { isContext } = require('vm');
 module.exports = {
     entry: './src/javascript/main.js',
     output: {
@@ -22,11 +23,26 @@ module.exports = {
                     },
                 ],
             },
+            {
+                test: /\.png|\.jpg/,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            esModule: false,
+                            name: 'images/[name].[ext]',
+                        },
+                    },
+                ],
+            },
         ],
     },
+    stats: {
+        children: true,
+      },
     plugins: [
         new MiniCssExtractPlugin({
-            filename:'./stylesheets/main.css',
+            filename: './stylesheets/main.css',
         }),
         new HtmlWebpackPlugin({
             template: './src/templates/index.html',
